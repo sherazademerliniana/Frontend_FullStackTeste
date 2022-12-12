@@ -16,6 +16,7 @@ export const ButtonStyled = styled(Button)`
   &:hover {
     background-color: ${(props) => props.hover};
     border: 0.3rem solid ${(props) => props.hover};
+    color: ${(props) => props.hovercolor};
   }
   ${(props) => {
     switch (props.sizebutton) {

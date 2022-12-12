@@ -1,13 +1,23 @@
-import { Route, Routes } from "react-router-dom";
-import { LoginPage } from "../pages/Login";
-import { RegisterPage } from "../pages/Register";
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../providers/Users";
 
-export const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="login" element={<LoginPage />} />
-      <Route path="register" element={<RegisterPage />} />
-      <Route path="client" />
-    </Routes>
-  );
+export const ProtectedRoute = ({ element: Element, onlyFor }) => {
+  const { userToken } = useContext(UserContext);
+
+  if (!userToken) {
+    return <Navigate to="/" />;
+  }
+
+  return <>{Element}</>;
+};
+
+export const LoginOrRegisterRoute = ({ element: Element }) => {
+  const { userToken } = useContext(UserContext);
+
+  if (userToken) {
+    return <Navigate to="/home" />;
+  }
+
+  return <>{Element}</>;
 };

@@ -22,29 +22,32 @@ export const UserProvider = ({ children }) => {
     api
       .post("/login", user_data)
       .then((res) => {
-        console.log(res);
+        getUser(res.data.token);
         setUserToken(res.data.token);
         localStorage.setItem("@userToken", JSON.stringify(res.data.token));
-        getUser(res.data.token);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const getUser = () => {
+  const getUser = (data_token) => {
+    const configGet = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data_token}`,
+      },
+    };
     api
-      .get("/users", config)
+      .get("/users", configGet)
       .then((res) => {
         setUser(res.data);
         localStorage.setItem("@userData", JSON.stringify(res.data));
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };
 
   const postUser = (client_data) => {
-    console.log(client_data);
     api
       .post("/users", client_data)
       .then((res) => {
@@ -56,7 +59,7 @@ export const UserProvider = ({ children }) => {
 
   const deleteUser = (client_id) => {
     api
-      .delete(`/users/${client_id}`)
+      .delete(`/users/${client_id}`, config)
       .then((res) => {
         getUser();
       })
@@ -66,11 +69,21 @@ export const UserProvider = ({ children }) => {
   const exitUser = () => {
     setUserToken("");
     localStorage.removeItem("@userToken");
+    setUser("");
+    localStorage.removeItem("@userData");
   };
 
   return (
     <UserContext.Provider
-      value={{ user, getUser, postUser, deleteUser, loginUser, exitUser }}
+      value={{
+        user,
+        userToken,
+        getUser,
+        postUser,
+        deleteUser,
+        loginUser,
+        exitUser,
+      }}
     >
       {children}
     </UserContext.Provider>

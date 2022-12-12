@@ -4,15 +4,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ButtonStyled } from "../Button/style";
-import { useContext } from "react";
-import { UserContext } from "../../providers/Users";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { ClientContext } from "../../providers/Clients";
 
-export const FormRegister = () => {
+export const FormRegisterClient = () => {
   const navigate = useNavigate();
   const schema = yup.object().shape({
-    username: yup.string().required("Required field"),
-    password: yup.string().required("Password required"),
     full_name: yup.string().required("Enter your name"),
     email: yup
       .string()
@@ -27,34 +25,20 @@ export const FormRegister = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema), reValidateMode: "onSubmit" });
 
-  const { postUser } = useContext(UserContext);
-  const onSubmit = async (data_user) => {
-    data_user["contacts"] = [
-      { email: data_user.email, telephone: data_user.telephone },
+  const { postClient } = useContext(ClientContext);
+
+  const onSubmit = async (data_client) => {
+    data_client["contacts"] = [
+      { email: data_client.email, telephone: data_client.telephone },
     ];
-    delete data_user.email;
-    delete data_user.telephone;
-    postUser(data_user);
+    delete data_client.email;
+    delete data_client.telephone;
+
+    postClient(data_client);
   };
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        label="Username"
-        placeholder="Username"
-        type="text"
-        register={register}
-        name="username"
-        error={errors?.username?.message}
-      />
-      <Input
-        label="Password"
-        placeholder="Password"
-        type="password"
-        register={register}
-        name="password"
-        error={errors?.password?.message}
-      />
       <Input
         label="Full Name"
         placeholder="Maria da Silva"
@@ -90,7 +74,7 @@ export const FormRegister = () => {
         color="var(--grey-2)"
         hovercolor="var(--grey)"
       >
-        Registrar
+        Registrar Cliente
       </ButtonStyled>
 
       <ButtonStyled
@@ -101,7 +85,7 @@ export const FormRegister = () => {
         hover="var(--grey)"
         color="var(--grey)"
         hovercolor="var(--grey-2)"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
       >
         Voltar
       </ButtonStyled>

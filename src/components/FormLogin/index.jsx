@@ -53,6 +53,7 @@ export const FormLogin = () => {
         type="submit"
         hover="var(--grey-2)"
         color="var(--grey-2)"
+        hovercolor="var(--grey)"
       >
         Entrar
       </ButtonStyled>
@@ -66,6 +67,7 @@ export const FormLogin = () => {
         type="submit"
         hover="var(--grey)"
         color="var(--grey)"
+        hovercolor="var(--grey-2)"
         onClick={() => navigate("/register")}
       >
         Cadastre-se
